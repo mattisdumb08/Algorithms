@@ -5,6 +5,12 @@
 
 unsigned short int test = 32;
 
+void outPutAll(unsigned short int **inGrid){
+
+    
+
+}
+
 int main(){
 
     unsigned short int dimen;
@@ -32,7 +38,11 @@ int main(){
     for (int i = 0 ; i < dimen ; i++){
         for ( int j = 0 ; j < dimen ; j++){
 
-            testGrid[i][j] = 0;
+            unsigned short int tempInput;
+
+            scanf("%hu" , &tempInput);
+
+            testGrid[i][j] = tempInput;
 
         }
     }
@@ -44,6 +54,8 @@ int main(){
     // for (int index = 0 ; index < test ; index++){  
 
     // }
+
+    free(testGrid);
 
     return 0;
 
