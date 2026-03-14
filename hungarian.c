@@ -3,9 +3,7 @@
 #include <time.h>
 #include <stdbool.h>
 
-unsigned short int test = 32;
-
-void outPutAll(unsigned short int **inGrid , int inDimensions){
+void outputAll(unsigned short int **inGrid , int inDimensions){
 
     printf("-------\n");
 
@@ -48,7 +46,7 @@ void reduce(unsigned short int **inputGrid , int inputDimensions){
     }
 
     printf("Reduced rows only:\n");
-    outPutAll(inputGrid , inputDimensions);
+    outputAll(inputGrid , inputDimensions);
 
     for ( int i = 0 ; i < inputDimensions ; i++){
 
@@ -73,7 +71,7 @@ void reduce(unsigned short int **inputGrid , int inputDimensions){
     }
 
     printf("Reduced rows and columns:\n");
-    outPutAll(inputGrid , inputDimensions);
+    outputAll(inputGrid , inputDimensions);
 
 }
 
@@ -82,6 +80,72 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
     int numberOfLines = 0;
 
     bool isOptimal = false;
+    bool beenAugmented = true;
+
+    int numberOfZerosRows;
+
+    int numberOfZerosColumns;
+
+    for (int a = 0 ; a < inputDimensions ; a++){
+
+        for (int b = 0 ; b < inputDimensions ; b++){
+
+            inputReference[a][b] = 0;
+
+        }
+
+    }
+
+    for (int i = 0 ; i < inputDimensions ; i++){
+
+        numberOfZerosRows = 0;
+        numberOfZerosColumns = 0;
+
+        for (int k = 0 ; k < inputDimensions ; k++){
+
+            if (inputGrid[i][k] == 0){
+
+                numberOfZerosRows += 1;
+
+            } else if (inputGrid[k][i] == 0){
+
+                numberOfZerosColumns += 1;
+
+            }
+
+        }
+
+        if (numberOfZerosColumns > numberOfZerosRows){
+
+            for (int j = 0 ; j < inputDimensions ; j ++){
+
+                inputReference[j][i] += 1;
+
+            }
+
+            numberOfLines += 1;
+
+        } else if (numberOfZerosColumns == numberOfZerosRows || numberOfZerosColumns < numberOfZerosRows){
+
+            for (int j = 0 ; j < inputDimensions ; j++){
+
+                inputReference[i][j] += 1;
+
+            }
+
+            numberOfLines += 1;
+
+        }
+
+
+    }
+
+    if (numberOfLines == inputDimensions){
+
+        isOptimal = true;
+        beenAugmented = false;
+
+    }
 
     while (isOptimal == false){
 
@@ -200,16 +264,21 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
             }
 
         printf("Augmentation Step:\n");
-        outPutAll(inputGrid , inputDimensions);
+        outputAll(inputGrid , inputDimensions);
 
         }
 
-
-
     }
 
-    printf("End of augmentation:\n");
-    outPutAll(inputGrid , inputDimensions);
+    if (beenAugmented == true){
+        printf("End of augmentation:\n");
+        outputAll(inputGrid , inputDimensions);
+    } else {
+
+        printf("End result (no augmentation required):\n");
+        outputAll(inputGrid , inputDimensions);
+
+    }
 
 }
 
@@ -217,9 +286,11 @@ int main(){
 
     unsigned short int dimen;
 
+    printf("Enter n value for dimensions (nXn):");    
     scanf("%hu" , &dimen);
 
     unsigned short int **testGrid = malloc(dimen * sizeof(unsigned short int*));
+    unsigned short int **copyGrid = malloc(dimen * sizeof(unsigned short int*));
 
     unsigned short int **referenceGrid = malloc(dimen * sizeof(unsigned short int*));
 
@@ -227,12 +298,15 @@ int main(){
         return 1;
     } else if (!referenceGrid){
         return 1;
+    } else if (!copyGrid){
+        return 1;
     }
 
-    for ( int i = 0 ; i < dimen ; i++){
+    for (int i = 0 ; i < dimen ; i++){
 
         testGrid[i] = malloc(dimen * sizeof(unsigned short int*));
         referenceGrid[i] = malloc(dimen * sizeof(unsigned short int*));
+        copyGrid[i] = malloc(dimen * sizeof(unsigned short int *));
 
         if (!testGrid[i]){
 
@@ -242,11 +316,18 @@ int main(){
 
             return 1;
 
+        } else if (!copyGrid[i]){
+
+            return 1;
+
         }
 
     }
 
     for (int i = 0 ; i < dimen ; i++){
+
+        printf("current row: %i\n" , i + 1);
+
         for ( int j = 0 ; j < dimen ; j++){
 
             unsigned short int tempInput;
@@ -254,6 +335,7 @@ int main(){
             scanf("%hu" , &tempInput);
 
             testGrid[i][j] = tempInput;
+            copyGrid[i][j] = tempInput;
             referenceGrid[i][j] = 0;
 
         }
@@ -261,25 +343,33 @@ int main(){
 
     printf("-------\n");
 
+    outputAll(testGrid , dimen);
+
     clock_t start = clock();
-    outPutAll(testGrid , dimen);
-    clock_t end = clock();
-
-    double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
-
-    printf("%f\n" , elapsed);
-
     reduce(testGrid , dimen);
     augment(testGrid , dimen , referenceGrid);
+    clock_t end = clock();
+
+    printf("Original cost matrix:\n");
+    outputAll(copyGrid , dimen);
+
+    double elapsed = (double)(end - start);
+
+    printf("%f" , elapsed);
 
     for ( int i = 0 ; i < dimen ; i++){
 
         free(testGrid[i]);
+        free(referenceGrid[i]);
 
     }
 
     free(testGrid);
+    free(referenceGrid);
 
+    int windowHold;
+
+    getc(stdin);
 
     return 0;
 
