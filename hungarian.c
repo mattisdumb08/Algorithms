@@ -141,9 +141,6 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
             }
 
 
-
-            printf("refernce\n");
-            outPutAll(inputReference , inputDimensions);
         }
 
         if (numberOfLines == inputDimensions){
@@ -205,7 +202,6 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
             printf("Augmentation Step:\n");
             outPutAll(inputGrid , inputDimensions);
 
-            
         }
 
 
