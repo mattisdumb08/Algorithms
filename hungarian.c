@@ -199,8 +199,8 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
             }
 
-            printf("Augmentation Step:\n");
-            outPutAll(inputGrid , inputDimensions);
+        printf("Augmentation Step:\n");
+        outPutAll(inputGrid , inputDimensions);
 
         }
 
