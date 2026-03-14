@@ -153,7 +153,7 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
         int numberOfZerosColumns;
 
-        for (int a = 0 ; a < inputDimensions ; a++){
+        for (int a = 0 ; a < inputDimensions ; a++){ // Rest reference grid to 0
 
             for (int b = 0 ; b < inputDimensions ; b++){
 
@@ -165,7 +165,7 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
         for (int i = 0 ; i < inputDimensions ; i++){
 
-            numberOfZerosRows = 0;
+            numberOfZerosRows = 0; // Rest the number of zeros in each next diagonal
             numberOfZerosColumns = 0;
 
             for (int k = 0 ; k < inputDimensions ; k++){
@@ -204,6 +204,24 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
             }
 
+
+        }
+
+        for (int i = 0 ; i < inputDimensions ; i++){ // Go through the whole grid and referenceGrid to check if there are any remaining 0s that are not covered
+
+            for (int k = 0 ; k < inputDimensions ; k++){
+
+                if (inputGrid[i][k] == 0 && inputReference[i][k]){
+
+                    for (int j = 0 ; j < inputDimensions ; j++){
+
+                        inputReference[i][j] += 1;
+
+                    }
+
+                }
+
+            }
 
         }
 
@@ -355,7 +373,7 @@ int main(){
 
     double elapsed = (double)(end - start);
 
-    printf("%f" , elapsed);
+    printf("%.6f" , elapsed);
 
     for ( int i = 0 ; i < dimen ; i++){
 
