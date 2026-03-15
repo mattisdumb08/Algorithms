@@ -3,6 +3,12 @@
 #include <time.h>
 #include <stdbool.h>
 
+// Use this to test
+//|10| |5| |7| |12|
+//|9| |6| |9| |10|
+//|7| |12| |10| |8|
+//|9| |5| |9| |8|
+
 void outputAll(unsigned short int **inGrid , int inDimensions){
 
     printf("-------\n");
@@ -159,19 +165,22 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
                     for(int a = 0 ; a < inputDimensions ; a++){
 
-                        if (inputGrid[i][a] == 0 && inputReference[i][a] == 0){
+                        if (inputGrid[i][a] == 0){
 
                             tempRowTotal += 1;
 
                         } 
                         
-                        if (inputGrid[a][k] == 0 && inputReference[a][k] == 0){
+                        if (inputGrid[a][k] == 0){
 
                             tempColumnTotal += 1;
 
                         }
                     
                     }
+
+                    // printf("%i " , tempRowTotal);
+                    // printf("%i" , tempColumnTotal);
 
                     if (tempRowTotal > tempColumnTotal || tempRowTotal == tempColumnTotal){
 
@@ -193,9 +202,9 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
                         numberOfLines += 1;
 
-                    outputAll(inputReference , inputDimensions);
-
                     }
+
+                    outputAll(inputReference , inputDimensions);
 
                 }
                 
@@ -234,8 +243,6 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
                 for (int k = 0 ; k < inputDimensions ; k++){
 
                     if (inputGrid[i][k] < e && inputReference[i][k] == 0){
-
-                        printf("%i" , inputGrid[i][k]);
 
                         e = inputGrid[i][k];
 
