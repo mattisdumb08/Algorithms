@@ -80,74 +80,15 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
     int numberOfLines = 0;
 
     bool isOptimal = false;
-    bool beenAugmented = true;
+    bool beenAugmented = false;
 
     int numberOfZerosRows;
 
     int numberOfZerosColumns;
 
-    for (int a = 0 ; a < inputDimensions ; a++){
-
-        for (int b = 0 ; b < inputDimensions ; b++){
-
-            inputReference[a][b] = 0;
-
-        }
-
-    }
-
-    for (int i = 0 ; i < inputDimensions ; i++){
-
-        numberOfZerosRows = 0;
-        numberOfZerosColumns = 0;
-
-        for (int k = 0 ; k < inputDimensions ; k++){
-
-            if (inputGrid[i][k] == 0){
-
-                numberOfZerosRows += 1;
-
-            } else if (inputGrid[k][i] == 0){
-
-                numberOfZerosColumns += 1;
-
-            }
-
-        }
-
-        if (numberOfZerosColumns > numberOfZerosRows){
-
-            for (int j = 0 ; j < inputDimensions ; j ++){
-
-                inputReference[j][i] += 1;
-
-            }
-
-            numberOfLines += 1;
-
-        } else if (numberOfZerosColumns == numberOfZerosRows || numberOfZerosColumns < numberOfZerosRows){
-
-            for (int j = 0 ; j < inputDimensions ; j++){
-
-                inputReference[i][j] += 1;
-
-            }
-
-            numberOfLines += 1;
-
-        }
-
-
-    }
-
-    if (numberOfLines == inputDimensions){
-
-        isOptimal = true;
-        beenAugmented = false;
-
-    }
-
     while (isOptimal == false){
+
+        numberOfLines = 0;
 
         int numberOfZerosRows;
 
@@ -163,73 +104,115 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
         }
 
-        for (int i = 0 ; i < inputDimensions ; i++){
+        // for (int i = 0 ; i < inputDimensions ; i++){
 
-            numberOfZerosRows = 0; // Rest the number of zeros in each next diagonal
-            numberOfZerosColumns = 0;
+        //     numberOfZerosRows = 0; // Reset the number of zeros in each next diagonal
+        //     numberOfZerosColumns = 0;
 
-            for (int k = 0 ; k < inputDimensions ; k++){
+        //     for (int k = 0 ; k < inputDimensions ; k++){
 
-                if (inputGrid[i][k] == 0){
+        //         if (inputGrid[i][k] == 0){
 
-                    numberOfZerosRows += 1;
+        //             numberOfZerosRows += 1;
 
-                } else if (inputGrid[k][i] == 0){
+        //         } else if (inputGrid[k][i] == 0){
 
-                    numberOfZerosColumns += 1;
+        //             numberOfZerosColumns += 1;
 
-                }
+        //         }
 
-            }
+        //     }
 
-            if (numberOfZerosColumns > numberOfZerosRows){
+        //     if (numberOfZerosColumns > numberOfZerosRows){
 
-                for (int j = 0 ; j < inputDimensions ; j ++){
+        //         for (int j = 0 ; j < inputDimensions ; j ++){
 
-                    inputReference[j][i] += 1;
+        //             inputReference[j][i] += 1;
 
-                }
+        //         }
 
-                numberOfLines += 1;
+        //         numberOfLines += 1;
 
-            } else if (numberOfZerosColumns == numberOfZerosRows || numberOfZerosColumns < numberOfZerosRows){
+        //     } else if (numberOfZerosColumns == numberOfZerosRows){
 
-                for (int j = 0 ; j < inputDimensions ; j++){
+        //         for (int j = 0 ; j < inputDimensions ; j++){
 
-                    inputReference[i][j] += 1;
+        //             inputReference[i][j] += 1;
 
-                }
+        //         }
 
-                numberOfLines += 1;
+        //         numberOfLines += 1;
 
-            }
+        //     }
 
 
-        }
+        // }
 
         for (int i = 0 ; i < inputDimensions ; i++){ // Go through the whole grid and referenceGrid to check if there are any remaining 0s that are not covered
 
             for (int k = 0 ; k < inputDimensions ; k++){
+                
+                unsigned short int tempRowTotal = 0;
+                unsigned short int tempColumnTotal = 0;
 
-                if (inputGrid[i][k] == 0 && inputReference[i][k]){
+                if (inputGrid[i][k] == 0 && inputReference[i][k] == 0){
 
-                    for (int j = 0 ; j < inputDimensions ; j++){
+                    for(int a = 0 ; a < inputDimensions ; a++){
 
-                        inputReference[i][j] += 1;
+                        if (inputGrid[i][a] == 0 && inputReference[i][a] == 0){
+
+                            tempRowTotal += 1;
+
+                        } 
+                        
+                        if (inputGrid[a][k] == 0 && inputReference[a][k] == 0){
+
+                            tempColumnTotal += 1;
+
+                        }
+                    
+                    }
+
+                    if (tempRowTotal > tempColumnTotal || tempRowTotal == tempColumnTotal){
+
+                        for (int a = 0 ; a < inputDimensions ; a++){
+
+                            inputReference[i][a] += 1;
+
+                        }
+
+                        numberOfLines += 1;
+
+                    } else if (tempColumnTotal > tempRowTotal){
+
+                        for (int a = 0 ; a < inputDimensions ; a++){
+
+                            inputReference[a][k] += 1;
+
+                        }
+
+                        numberOfLines += 1;
+
+                    outputAll(inputReference , inputDimensions);
 
                     }
 
                 }
+                
+                // Depending on which total is larger create a line in that direction
+
 
             }
 
         }
+
+        printf("%i" , numberOfLines);
 
         if (numberOfLines == inputDimensions){
 
             isOptimal = true;
 
-        } else {
+        } else if (numberOfLines < inputDimensions){
 
             int e;
 
@@ -237,9 +220,9 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
                 for (int b = 0 ; b < inputDimensions ; b++){
 
-                    if (inputReference[a][b]){
+                    if (inputReference[a][b] == 0){
 
-                        e == inputGrid[a][b];
+                        e = inputGrid[a][b];
 
                     }
 
@@ -271,7 +254,9 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
                         inputGrid[i][k] -= e;
 
-                    } else if (inputReference[i][k] == 2){
+                    }
+                    
+                    else if (inputReference[i][k] == 2){
 
                         inputGrid[i][k] += e;
 
@@ -280,11 +265,12 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
                 }
 
             }
+        }
 
         printf("Augmentation Step:\n");
         outputAll(inputGrid , inputDimensions);
 
-        }
+        outputAll(inputReference  , inputDimensions);
 
     }
 
@@ -309,7 +295,6 @@ int main(){
 
     unsigned short int **testGrid = malloc(dimen * sizeof(unsigned short int*));
     unsigned short int **copyGrid = malloc(dimen * sizeof(unsigned short int*));
-
     unsigned short int **referenceGrid = malloc(dimen * sizeof(unsigned short int*));
 
     if (!testGrid){
@@ -379,15 +364,19 @@ int main(){
 
         free(testGrid[i]);
         free(referenceGrid[i]);
+        free(copyGrid[i]);
 
     }
 
     free(testGrid);
     free(referenceGrid);
+    free(copyGrid);
 
-    int windowHold;
+    int *windowHold = malloc(sizeof(int));
 
-    getc(stdin);
+    scanf("%i" , windowHold);
+
+    free(windowHold);
 
     return 0;
 
