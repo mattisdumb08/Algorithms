@@ -8,8 +8,21 @@
 //|9| |6| |9| |10|
 //|7| |12| |10| |8|
 //|9| |5| |9| |8|
+// Time:
+// 0.000215 seconds
+// Note: probably because of the compiler and its optimisations.
 
-void outputAll(unsigned short int **inGrid , int inDimensions){
+// This works; it retries augmentation and when sum of lines are equal to the n dimensions then it will not perform the subtractions.
+
+// The algorithm will arbitrarily place a line horizontally in the case that the number of uncovered zeros in a row are equal tot he number of
+// uncovered zeros in a column.
+
+// Currently, the program requires further extension to perform decision making on an nXn matrix, maximising allocations and computing
+// nXm matrices.
+
+// It is probably really inefficient. It's probably <O(n^3)
+
+void outputAll(unsigned short int **inGrid , int inDimensions){ // Output the whole grid with a break at the top to differentiate
 
     printf("-------\n");
 
@@ -27,7 +40,7 @@ void outputAll(unsigned short int **inGrid , int inDimensions){
 
 }
 
-void reduce(unsigned short int **inputGrid , int inputDimensions){
+void reduce(unsigned short int **inputGrid , int inputDimensions){ // Reduce the column and the rows
 
     for ( int i = 0 ; i < inputDimensions ; i++ ){
 
@@ -81,7 +94,8 @@ void reduce(unsigned short int **inputGrid , int inputDimensions){
 
 }
 
-void augment(unsigned short int **inputGrid , int inputDimensions , unsigned short int **inputReference){
+void augment(unsigned short int **inputGrid , int inputDimensions , unsigned short int **inputReference){ // Placing lines to cover
+// Any uncovered 0s and subtracting all uncovered by the smallest uncovered element.
 
     int numberOfLines = 0;
 
@@ -274,7 +288,7 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
             }
         }
 
-        printf("Augmentation Step:\n");
+        printf("Augmentation Step:\n"); // Output the end of augmenting
         outputAll(inputGrid , inputDimensions);
 
         outputAll(inputReference  , inputDimensions);
@@ -304,7 +318,7 @@ int main(){
     unsigned short int **copyGrid = malloc(dimen * sizeof(unsigned short int*));
     unsigned short int **referenceGrid = malloc(dimen * sizeof(unsigned short int*));
 
-    if (!testGrid){
+    if (!testGrid){ // If memory cannot be assigned to any of those pointers
         return 1;
     } else if (!referenceGrid){
         return 1;
@@ -319,17 +333,11 @@ int main(){
         copyGrid[i] = malloc(dimen * sizeof(unsigned short int *));
 
         if (!testGrid[i]){
-
             return 1;
-
         } else if (!referenceGrid[i]) {
-
             return 1;
-
         } else if (!copyGrid[i]){
-
             return 1;
-
         }
 
     }
@@ -363,9 +371,9 @@ int main(){
     printf("Original cost matrix:\n");
     outputAll(copyGrid , dimen);
 
-    double elapsed = (double)(end - start);
+    double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
 
-    printf("%.6f" , elapsed);
+    printf("%f" , elapsed);
 
     for ( int i = 0 ; i < dimen ; i++){
 
@@ -379,11 +387,9 @@ int main(){
     free(referenceGrid);
     free(copyGrid);
 
-    int *windowHold = malloc(sizeof(int));
+    int windowHold;
 
-    scanf("%i" , windowHold);
-
-    free(windowHold);
+    scanf("%i" , &windowHold);
 
     return 0;
 
