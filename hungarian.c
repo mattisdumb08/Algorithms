@@ -295,15 +295,8 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
     }
 
-    if (beenAugmented == true){
-        printf("End of augmentation:\n");
-        outputAll(inputGrid , inputDimensions);
-    } else {
-
-        printf("End result (no augmentation required):\n");
-        outputAll(inputGrid , inputDimensions);
-
-    }
+    printf("End of augmentation (If needed):\n");
+    outputAll(inputGrid , inputDimensions);
 
 }
 
@@ -375,12 +368,11 @@ int main(){
 
     printf("%f" , elapsed);
 
+    // Freeing all memory so it can be used again
     for ( int i = 0 ; i < dimen ; i++){
-
         free(testGrid[i]);
         free(referenceGrid[i]);
         free(copyGrid[i]);
-
     }
 
     free(testGrid);
