@@ -300,7 +300,7 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
 }
 
-int main(){
+int calculation(){
 
     unsigned short int dimen;
 
@@ -366,7 +366,7 @@ int main(){
 
     double elapsed = (double)(end - start) / CLOCKS_PER_SEC;
 
-    printf("%f" , elapsed);
+    printf("%f\n" , elapsed);
 
     // Freeing all memory so it can be used again
     for ( int i = 0 ; i < dimen ; i++){
@@ -379,10 +379,37 @@ int main(){
     free(referenceGrid);
     free(copyGrid);
 
-    int windowHold;
-
-    scanf("%i" , &windowHold);
-
     return 0;
+
+}
+
+int main(){
+
+    char continuation = 'y';
+
+    int errorCode = -1;
+
+    while (continuation == 'y'){
+
+        errorCode = calculation();
+
+        switch (errorCode){
+
+            case 0:
+                printf("Press y to restart or n to stop: \n");
+                scanf(" %c" , &continuation);
+                break;
+            
+            case 1:
+                printf("An error has occured. Press y to restart or n to stop: \n");
+                scanf(" %c" , &continuation);
+                break;
+            
+            default:
+                printf("Error: function terminated with no code. Terminating...\n");
+
+        }
+
+    }
 
 }
