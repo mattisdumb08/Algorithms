@@ -22,7 +22,7 @@
 
 // It is probably really inefficient. It's probably <O(n^3)
 
-void outputAll(unsigned short int **inGrid , int inDimensions){ // Output the whole grid with a break at the top to differentiate
+void outputAll(short int **inGrid , int inDimensions){ // Output the whole grid with a break at the top to differentiate
 
     printf("-------\n");
 
@@ -40,7 +40,7 @@ void outputAll(unsigned short int **inGrid , int inDimensions){ // Output the wh
 
 }
 
-void reduce(unsigned short int **inputGrid , int inputDimensions){ // Reduce the column and the rows
+void reduce(short int **inputGrid , int inputDimensions){ // Reduce the column and the rows
 
     for ( int i = 0 ; i < inputDimensions ; i++ ){
 
@@ -94,7 +94,7 @@ void reduce(unsigned short int **inputGrid , int inputDimensions){ // Reduce the
 
 }
 
-void augment(unsigned short int **inputGrid , int inputDimensions , unsigned short int **inputReference){ // Placing lines to cover
+void augment(short int **inputGrid , int inputDimensions , short int **inputReference){ // Placing lines to cover
 // Any uncovered 0s and subtracting all uncovered by the smallest uncovered element.
 
     int numberOfLines = 0;
@@ -172,8 +172,8 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
             for (int k = 0 ; k < inputDimensions ; k++){
                 
-                unsigned short int tempRowTotal = 0;
-                unsigned short int tempColumnTotal = 0;
+                short int tempRowTotal = 0;
+                short int tempColumnTotal = 0;
 
                 if (inputGrid[i][k] == 0 && inputReference[i][k] == 0){
 
@@ -302,14 +302,14 @@ void augment(unsigned short int **inputGrid , int inputDimensions , unsigned sho
 
 int calculation(){
 
-    unsigned short int dimen;
+    short int dimen;
 
     printf("Enter n value for dimensions (nXn):");    
     scanf("%hu" , &dimen);
 
-    unsigned short int **testGrid = malloc(dimen * sizeof(unsigned short int*));
-    unsigned short int **copyGrid = malloc(dimen * sizeof(unsigned short int*));
-    unsigned short int **referenceGrid = malloc(dimen * sizeof(unsigned short int*));
+    short int **testGrid = malloc(dimen * sizeof(short int*));
+    short int **copyGrid = malloc(dimen * sizeof(short int*));
+    short int **referenceGrid = malloc(dimen * sizeof(short int*));
 
     if (!testGrid){ // If memory cannot be assigned to any of those pointers
         return 1;
@@ -321,9 +321,9 @@ int calculation(){
 
     for (int i = 0 ; i < dimen ; i++){
 
-        testGrid[i] = malloc(dimen * sizeof(unsigned short int*));
-        referenceGrid[i] = malloc(dimen * sizeof(unsigned short int*));
-        copyGrid[i] = malloc(dimen * sizeof(unsigned short int *));
+        testGrid[i] = malloc(dimen * sizeof(short int*));
+        referenceGrid[i] = malloc(dimen * sizeof(short int*));
+        copyGrid[i] = malloc(dimen * sizeof(short int *));
 
         if (!testGrid[i]){
             return 1;
@@ -341,7 +341,7 @@ int calculation(){
 
         for ( int j = 0 ; j < dimen ; j++){
 
-            unsigned short int tempInput;
+            short int tempInput;
 
             scanf("%hu" , &tempInput);
 
