@@ -1,5 +1,13 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <stdlib.h> // In the case that I ever need dynamic memory ( for some odd reasons )
+
+struct integerHashTable {
+
+    int maxSize;
+    int size;
+    int hashTable[1];
+
+};
 
 int hash(int value , int maxSize){
     
