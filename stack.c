@@ -3,27 +3,28 @@
 
 void push(int input , int stack[] , int *topPointer , int *size , int max){
 
-    if (*topPointer == 0){
+    if (*size == 0){
 
         (stack)[0] = input;
         *size += 1;
-        *topPointer += 1;
+        printf("Pushed %i\n" , input);
 
-    } else if (*topPointer > 0 && *topPointer < (max)){
+    } else if (*size > 0 && *size < (max)){
 
         stack[*topPointer + 1] = input;
         *size += 1;
         *topPointer += 1;
+        printf("Pushed %i\n" , input);
 
-    } else if (*topPointer + 1 >= (max)){
+    } else if (*size >= max){
         printf("Error: max size of stack reached\n");
     }
 
 }
 
-int pop(int stack[] , int *topPointer){
+int pop(int stack[] , int *topPointer , int *size){
 
-    if (*topPointer == 0){
+    if (*size == 0){
 
         printf("Empty\n");
 
@@ -33,8 +34,22 @@ int pop(int stack[] , int *topPointer){
     int toReturn = stack[*topPointer];
 
     *topPointer -= 1;
+    *size -= 1;
 
     return toReturn;
+
+}
+
+int peek(int stack[] , int *topPointer , int *size){
+
+    if (*size == 0){
+
+        printf("Error: empty stack\n");
+
+        return -1;
+    }
+
+    return stack[*topPointer];
 
 }
 
@@ -48,7 +63,7 @@ int main(){
 
     for (int i = 0 ; i < maxSizeOfStack ; i++){
 
-        stack[i] = 0; // Initialise to 0 values
+        stack[i] = -1; // Initialise to 0 values
 
     }
 
@@ -59,7 +74,10 @@ int main(){
     push(56 , stack , &topPointer , &size , maxSizeOfStack);
     push(56 , stack , &topPointer , &size , maxSizeOfStack);
 
-    printf("%i" , pop(stack , &topPointer));
+    printf("%i\n" , pop(stack , &topPointer , &size));
+    printf("%i\n" , pop(stack , &topPointer , &size));
+    printf("%i\n" , pop(stack , &topPointer , &size));
+    printf("%i\n" , pop(stack , &topPointer , &size));
 
     return 0;
 
