@@ -19,11 +19,11 @@ int hash(int value , int maxSize){
 }
 
 // Outputs all the elements of the hashTable ( not standard but just for testing )
-void outputIntHashTable(struct integerHashTable table){
+void outputIntHashTable(struct integerHashTable *table){
     
-    for (int i = 0 ; i < table.maxSize ; i++){
+    for (int i = 0 ; i < table->maxSize ; i++){
         
-        printf("%i\n" , table.hashTable[i]);
+        printf("%i\n" , table->hashTable[i]);
         
     }
     
@@ -32,19 +32,19 @@ void outputIntHashTable(struct integerHashTable table){
 
 // Input elements into the hashTable ( doesn't really work as it does normally )
 // No safeguards so memory corruption if inputs exceed the maximum number of elements
-void pushIntHashTable(int input , struct integerHashTable hashTable){
+void pushIntHashTable(int input , struct integerHashTable *hashTable){
     
-    int hashedAddress = hash(input , hashTable.maxSize);
+    int hashedAddress = hash(input , hashTable->maxSize);
     
-    if (hashTable.size >= hashTable.maxSize){
-        printf("Error: Max capacity of the hash table has been reached");
+    if (hashTable->size >= hashTable->maxSize){
+        printf("Error: Max capacity of the hash table has been reached (%i)\n" , input);
         return;
     }
 
-    if (hashTable.hashTable[hashedAddress] == 0){
-        hashTable.hashTable[hashedAddress] = input;
-        hashTable.size = hashTable.size + 1;
-    } else if (hashTable.hashTable[hashedAddress] != 0){
+    if (hashTable->hashTable[hashedAddress] == 0){
+        hashTable->hashTable[hashedAddress] = input;
+        hashTable->size = hashTable->size + 1;
+    } else if (hashTable->hashTable[hashedAddress] != 0){
 
         unsigned short int iterations = 0;
 
@@ -52,8 +52,8 @@ void pushIntHashTable(int input , struct integerHashTable hashTable){
 
         short int addressFound = 0;
         
-        while (hashTable.hashTable[hashedAddress] != 0){
-            hashedAddress = (hashedAddress + 3) % hashTable.maxSize;
+        while (hashTable->hashTable[hashedAddress] != 0){
+            hashedAddress = (hashedAddress + 3) % hashTable->maxSize;
 
             if (hashedAddress < previousAddress){
                 iterations += 1;
@@ -68,8 +68,8 @@ void pushIntHashTable(int input , struct integerHashTable hashTable){
         }
         
         if (addressFound == 1){
-            hashTable.hashTable[hashedAddress] = input;
-            hashTable.size = hashTable.size + 1;
+            hashTable->hashTable[hashedAddress] = input;
+            hashTable->size = hashTable->size + 1;
         }
         
     }
@@ -102,15 +102,14 @@ int main() {
     
     int input = 4;
     
-    pushIntHashTable(input , hashTable);
-    pushIntHashTable(94  , hashTable);
-    pushIntHashTable(55  , hashTable);
-    pushIntHashTable(87 , hashTable);
-    pushIntHashTable(634 , hashTable);
-    pushIntHashTable(999 , hashTable);
-    printf("%i\n----------\n" , hashTable.size);
+    pushIntHashTable(input , &hashTable);
+    pushIntHashTable(94  , &hashTable);
+    pushIntHashTable(55  , &hashTable);
+    pushIntHashTable(87 , &hashTable);
+    pushIntHashTable(634 , &hashTable);
+    pushIntHashTable(999 , &hashTable);
 
-    outputIntHashTable(hashTable);
+    outputIntHashTable(&hashTable);
 
     // Frees the memory of the malloc in the struct
     free(hashTable.hashTable);
