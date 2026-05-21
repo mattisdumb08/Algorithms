@@ -3,12 +3,13 @@
 
 struct integerHashTable {
 
-    int maxSize;
-    int size;
+    int maxSize; // Max size of the hashTable
+    int size; // Current size / number of elements in the hash Table
     int* hashTable; // Pointer to an array
 
 };
 
+// Calculates the address from the input and the maximum size
 int hash(int value , int maxSize){
     
     int toReturn = value % maxSize;
@@ -17,6 +18,7 @@ int hash(int value , int maxSize){
     
 }
 
+// Outputs all the elements of the hashTable ( not standard but just for testing )
 void outputIntHashTable(struct integerHashTable table){
     
     for (int i = 0 ; i < table.maxSize ; i++){
@@ -27,6 +29,9 @@ void outputIntHashTable(struct integerHashTable table){
     
 }
 
+
+// Input elements into the hashTable ( doesn't really work as it does normally )
+// No safeguards so memory corruption if inputs exceed the maximum number of elements
 void pushIntHashTable(int input , struct integerHashTable hashTable){
     
     int hashedAddress = hash(input , hashTable.maxSize);
@@ -44,6 +49,7 @@ void pushIntHashTable(int input , struct integerHashTable hashTable){
     }
 }
 
+// Initialiser for the IntegerHashTable struct
 struct integerHashTable newIntegerHashTable(int maxSize){
 
     struct integerHashTable newTable;
@@ -72,9 +78,11 @@ int main() {
     pushIntHashTable(94  , hashTable);
     pushIntHashTable(55  , hashTable);
     pushIntHashTable(87 , hashTable);
+    pushIntHashTable(634 , hashTable);
     
     outputIntHashTable(hashTable);
 
+    // Frees the memory of the malloc in the struct
     free(hashTable.hashTable);
 
     return 0;
