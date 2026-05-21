@@ -71,6 +71,7 @@ int main() {
     pushIntHashTable(input , hashTable);
     pushIntHashTable(94  , hashTable);
     pushIntHashTable(55  , hashTable);
+    pushIntHashTable(87 , hashTable);
     
     outputIntHashTable(hashTable);
 
