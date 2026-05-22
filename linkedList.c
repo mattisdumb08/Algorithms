@@ -8,11 +8,11 @@ struct IntNode{
 
 };
 
-struct IntNode newIntNode(int newValue){
+struct IntNode* newIntNode(int newValue){
 
-    struct IntNode newNode;
-    newNode.value = newValue;
-    newNode.nextPointer = NULL;
+    struct IntNode *newNode = malloc(sizeof(struct IntNode));
+    newNode->value = newValue;
+    newNode->nextPointer = NULL;
     
     return newNode;
 
@@ -24,38 +24,82 @@ struct IntLinkedList{
 
 };
 
-struct IntLinkedList newIntLinkedList(){
+struct IntLinkedList* newIntLinkedList(){
 
-    struct IntLinkedList tempLinkedList;
-    tempLinkedList.headPointer = NULL;
+    struct IntLinkedList *tempLinkedList = malloc(sizeof(struct IntLinkedList));
+    tempLinkedList->headPointer = NULL;
 
     return tempLinkedList;
 
-}
+};
 
 void intLinkedListAppend(int newValue , struct IntLinkedList *theList){
 
-    struct IntNode newNode = newIntNode(newValue);
+    struct IntNode *newNode = newIntNode(newValue);
 
     if (theList->headPointer == NULL){
-        printf("Path 0\n");
-        theList->headPointer = &newNode;
+        theList->headPointer = newNode;
     } else if (theList->headPointer != NULL){ // If the linked list is not empty
         struct IntNode *current = theList->headPointer;
-
-        printf("Path 1\n");
 
         while (current->nextPointer != NULL){
             current = current->nextPointer;
         }
 
-        current->nextPointer = &newNode;
+        current->nextPointer = newNode;
+
+    }
+
+}
+
+void intLinkedListRemove(int toRemove , struct IntLinkedList *theList){
+
+    if (theList->headPointer == NULL){
+
+        printf("Error: The integer linked list is empty");
+
+    } else if (theList->headPointer != NULL){
+
+        struct IntNode *current = theList->headPointer;
+        struct IntNode *previous = current;
+
+        if (theList->headPointer->nextPointer == NULL && theList->headPointer->value == toRemove){
+
+            free(theList->headPointer);
+            theList->headPointer = NULL;
+            return;
+
+        } else if (theList->headPointer->nextPointer != NULL && theList->headPointer->value == toRemove){
+
+            struct IntNode *next = theList->headPointer->nextPointer;
+            free(theList->headPointer);
+            theList->headPointer = next;
+            return;
+
+        }
+
+        while (current != NULL){
+
+            if (current->value == toRemove){
+
+                previous->nextPointer = current->nextPointer;
+
+                free(current);
+                break;
+
+            }
+
+            previous = current;
+            current = current->nextPointer;
+
+        }
 
     }
 
 }
 
 void intLinkedListTraverse(struct IntLinkedList *theList){
+
     struct IntNode *current = theList->headPointer;
 
     while (current != NULL){
@@ -67,14 +111,34 @@ void intLinkedListTraverse(struct IntLinkedList *theList){
 
 }
 
+void intLinkedListFree(struct IntLinkedList *theList){
+
+    struct IntNode *current = theList->headPointer;
+
+    while (current != NULL){
+
+        struct IntNode *toFree = current;
+        current = current->nextPointer;
+
+        free(toFree);
+
+    }
+
+    free(theList);
+
+}
+
 
 int main(){
 
-    struct IntLinkedList linkedList = newIntLinkedList();
-    intLinkedListAppend(23 , &linkedList);
-    intLinkedListAppend(67 , &linkedList);
-    intLinkedListAppend(78 , &linkedList);
-    intLinkedListTraverse(&linkedList);
+    struct IntLinkedList *linkedList = newIntLinkedList();
+    intLinkedListAppend(23 , linkedList);
+    intLinkedListAppend(67 , linkedList);
+    intLinkedListAppend(78 , linkedList);
+    intLinkedListRemove(23 , linkedList);
+    intLinkedListTraverse(linkedList);
+
+    intLinkedListFree(linkedList);
 
     return 0;
 
