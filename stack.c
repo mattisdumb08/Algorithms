@@ -1,6 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+struct IntegerStack{
+
+    int *stack;
+    int *stateTracker;
+    int topPointer;
+    int size;
+    int maxSize;
+
+};
+
 void push(int input , int stack[] , int *topPointer , int *size , int max){
 
     if (*topPointer == -1){
@@ -54,6 +64,78 @@ int peek(int stack[] , int *topPointer , int *size){
 
 }
 
+void intStackPush(int input , struct IntegerStack *thisStack){
+     
+     // Empty Stack
+    if (thisStack->topPointer == -1){
+        thisStack->topPointer = 0;
+        thisStack->stack[thisStack->topPointer] = input;
+        thisStack->stateTracker[thisStack->topPointer] = 1;
+    } else if (thisStack->topPointer != -1 && thisStack->topPointer < thisStack->maxSize - 1){
+
+        thisStack->topPointer += 1;
+        thisStack->stack[thisStack->topPointer] = input;
+        thisStack->stateTracker[thisStack->topPointer] = 1;
+    } else if (thisStack->topPointer == thisStack->maxSize - 1){
+
+        printf("Error: The stack is full.\n");
+
+    }
+
+}
+
+int intStackPop(struct IntegerStack *thisStack){
+
+    if (thisStack->topPointer == -1){
+
+        printf("Error: The stack is empty; returning -1");
+
+        return -1;
+
+    } else if (thisStack->topPointer > -1){
+
+        int toReturn = thisStack->stack[thisStack->topPointer];
+
+        thisStack->stateTracker[thisStack->topPointer] = -1;
+        thisStack->stack[thisStack->topPointer] = 0;
+
+        thisStack->topPointer -= 1;
+
+        return toReturn;
+
+    }
+
+}
+
+int intStackPeek(struct IntegerStack *thisStack){
+
+    if (thisStack->topPointer == -1){
+        printf("Error: The stack is empty; returning -1");
+        return -1;
+    } else if (thisStack->topPointer > -1){
+        return thisStack->stack[thisStack->topPointer];
+    }
+
+}
+
+struct IntegerStack newIntegerStack(int newMaxSize){
+    struct IntegerStack temp;
+    temp.maxSize = newMaxSize;
+    temp.size = 0;
+    temp.stack =  malloc(sizeof(int) * newMaxSize);
+    // 1 - occupied , 0 - empty , - -1 deleted
+    temp.stateTracker = malloc(sizeof(int) * newMaxSize);
+    temp.topPointer = -1;
+
+    for (int i = 0 ; i < newMaxSize ; i++){
+        temp.stateTracker[i] = 0;
+        temp.stack[i] = 0;
+    }
+
+    return temp;
+    
+}
+
 // Push, pop , peek
 int main(){
 
@@ -68,17 +150,32 @@ int main(){
 
     }
 
-    push(23 , stack , &topPointer , &size , maxSizeOfStack);
-    push(34 , stack , &topPointer , &size , maxSizeOfStack);
-    push(67 , stack , &topPointer , &size , maxSizeOfStack);
-    push(76 , stack , &topPointer , &size , maxSizeOfStack);
-    push(56 , stack , &topPointer , &size , maxSizeOfStack);
-    push(56 , stack , &topPointer , &size , maxSizeOfStack);
+    struct IntegerStack testStack = newIntegerStack(4);
 
-    printf("%i\n" , pop(stack , &topPointer , &size));
-    printf("%i\n" , pop(stack , &topPointer , &size));
-    printf("%i\n" , pop(stack , &topPointer , &size));
-    printf("%i\n" , pop(stack , &topPointer , &size));
+    intStackPush(19 , &testStack);
+    intStackPush(20 , &testStack);
+    intStackPush(21 , &testStack);
+    intStackPush(22 , &testStack);
+    intStackPush(23 , &testStack);
+
+    printf("%i\n" , intStackPop(&testStack));
+    printf("%i\n" , intStackPeek(&testStack));
+    printf("%i\n" , intStackPeek(&testStack));
+
+    // default stack implementation without structs
+    // push(23 , stack , &topPointer , &size , maxSizeOfStack);
+    // push(34 , stack , &topPointer , &size , maxSizeOfStack);
+    // push(67 , stack , &topPointer , &size , maxSizeOfStack);
+    // push(76 , stack , &topPointer , &size , maxSizeOfStack);
+    // push(56 , stack , &topPointer , &size , maxSizeOfStack);
+    // push(56 , stack , &topPointer , &size , maxSizeOfStack);
+
+    // printf("%i\n" , pop(stack , &topPointer , &size));
+    // printf("%i\n" , pop(stack , &topPointer , &size));
+    // printf("%i\n" , pop(stack , &topPointer , &size));
+    // printf("%i\n" , pop(stack , &topPointer , &size));
+
+    printf("0\n");
 
     return 0;
 
