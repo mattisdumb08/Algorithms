@@ -136,6 +136,13 @@ struct IntegerStack newIntegerStack(int newMaxSize){
     
 }
 
+void freeIntStack(struct IntegerStack *thisStack){
+
+    free(thisStack->stack);
+    free(thisStack->stateTracker);
+
+}
+
 // Push, pop , peek
 int main(){
 
@@ -174,6 +181,8 @@ int main(){
     // printf("%i\n" , pop(stack , &topPointer , &size));
     // printf("%i\n" , pop(stack , &topPointer , &size));
     // printf("%i\n" , pop(stack , &topPointer , &size));
+
+    freeIntStack(&testStack);
 
     printf("0\n");
 
