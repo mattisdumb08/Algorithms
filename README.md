@@ -3,7 +3,10 @@
 Mostly gonna be stuff to help understand topics better
 
 ## Data Types
-HashTable
+Hash Table
+Queue
+Stack
+Linked List
 
 ## To Do:
 Hungarian ( Struggles with specific edge cases and maximisation )
