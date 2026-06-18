@@ -79,7 +79,7 @@ void IntDictionaryAdd(char *key , int newValue , struct IntDictionary *thisDicti
 
     printf("%s\n" , key);
     printf("%i\n" , sizeOfKey);
-    printf("%i\n" , asciiValue);
+    printf("%i\n" , asciiValue); 
 
 }
 
