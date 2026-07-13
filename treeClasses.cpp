@@ -15,8 +15,6 @@ class Node{
         printf("%c\n" , data);
     }
 
-    Node(Node const &)
-
     Node* getLeftPointer(){
         return leftPointer;
     }
@@ -52,31 +50,31 @@ class Tree{
         }
 
         short int placeFound = false;
-        Node currentNode = *rootNode;
+        Node *currentNode = rootNode;
 
         while (placeFound == 0){
 
-            if (currentNode.getLeftPointer() != nullptr){
-                if (int(currentNode.getLeftPointer()->getData()) > int(newCharacter)){
-                    currentNode = currentNode.getLeftPointer();
+            if (currentNode->getLeftPointer() != nullptr){
+                if (int(currentNode->getLeftPointer()->getData()) > int(newCharacter)){
+                    currentNode = currentNode->getLeftPointer();
                 }
             }
             
-            if (currentNode.getRightPointer() != nullptr){
-                if (int(currentNode.getRightPointer()->getData()) < int(newCharacter)){
-                    currentNode = currentNode.getRightPointer();
+            if (currentNode->getRightPointer() != nullptr){
+                if (int(currentNode->getRightPointer()->getData()) < int(newCharacter)){
+                    currentNode = currentNode->getRightPointer();
                 }
             }   
         
-            if (currentNode.getLeftPointer() == nullptr && currentNode.getRightPointer() == nullptr){
+            if (currentNode->getLeftPointer() == nullptr && currentNode->getRightPointer() == nullptr){
                 placeFound = 1;
             }
         }
 
-        if (currentNode.getData() < newCharacter){
-            currentNode.setRightPointer(&newNode);
-        } else if (currentNode.getData() > newCharacter){
-            currentNode.setLeftPointer(&newNode);
+        if (currentNode->getData() < newCharacter){
+            currentNode->setRightPointer(&newNode);
+        } else if (currentNode->getData() > newCharacter){
+            currentNode->setLeftPointer(&newNode);
         }
 
         printf("root data: %c\n" , rootNode->getData());
@@ -122,6 +120,8 @@ void preOrder(Node *rootNode){
 }
 
 int main(){
+    
+    printf("Runnig");
 
     Tree testTree;
 
