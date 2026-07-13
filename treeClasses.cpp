@@ -12,18 +12,91 @@ class Node{
         leftPointer = newLeft;
         rightPointer = newRight;
         data = newData;
+        printf("%c\n" , data);
     }
+
+    Node(Node const &)
 
     Node* getLeftPointer(){
         return leftPointer;
+    }
+    void setLeftPointer(Node *newNodePointer){
+        leftPointer = newNodePointer;
     }
 
     Node* getRightPointer(){
         return rightPointer;
     }
+    void setRightPointer(Node *newNodePointer){
+        rightPointer = newNodePointer;
+    }
 
-    int getData(){
+    char getData(){
         return data;
+    }
+};
+
+class Tree{
+    private:
+    Node *rootNode;
+    public:
+    Tree(){
+        rootNode = nullptr;
+    }
+
+    void add(char newCharacter){
+        Node newNode(nullptr , newCharacter , nullptr);
+        if (rootNode == nullptr){ // If the root node is null / if the tree is empty
+            rootNode = &newNode;
+            return;
+        }
+
+        short int placeFound = false;
+        Node currentNode = *rootNode;
+
+        while (placeFound == 0){
+
+            if (currentNode.getLeftPointer() != nullptr){
+                if (int(currentNode.getLeftPointer()->getData()) > int(newCharacter)){
+                    currentNode = currentNode.getLeftPointer();
+                }
+            }
+            
+            if (currentNode.getRightPointer() != nullptr){
+                if (int(currentNode.getRightPointer()->getData()) < int(newCharacter)){
+                    currentNode = currentNode.getRightPointer();
+                }
+            }   
+        
+            if (currentNode.getLeftPointer() == nullptr && currentNode.getRightPointer() == nullptr){
+                placeFound = 1;
+            }
+        }
+
+        if (currentNode.getData() < newCharacter){
+            currentNode.setRightPointer(&newNode);
+        } else if (currentNode.getData() > newCharacter){
+            currentNode.setLeftPointer(&newNode);
+        }
+
+        printf("root data: %c\n" , rootNode->getData());
+
+    }
+
+    Node *getRoot(){
+        return rootNode;
+    }
+
+   
+    void preOrder(Node* currentNode){
+        printf("%c\n" , (*currentNode).getData());
+
+        // if (currentNode -> getLeftPointer() != nullptr){
+        //     preOrder(currentNode->getLeftPointer());
+        // }
+        // if (currentNode -> getRightPointer() != nullptr){
+        //     preOrder(currentNode -> getRightPointer());
+        // }
     }
 };
 
@@ -50,7 +123,17 @@ void preOrder(Node *rootNode){
 
 int main(){
 
+    Tree testTree;
+
     preOrder(&node1);
+    printf("-----\n");
+    testTree.add('F');
+    testTree.add('D');
+    testTree.add('B');
+
+    // printf("%c\n" , testTree.getRoot()->getData());
+
+    testTree.preOrder(testTree.getRoot());
 
     return 0;
 }
