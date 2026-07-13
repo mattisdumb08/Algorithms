@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdlib.h>
 
 class Node{
     private:
@@ -13,6 +14,13 @@ class Node{
         rightPointer = newRight;
         data = newData;
         printf("%c\n" , data);
+    }
+
+    Node(const Node &object){
+        leftPointer = object.leftPointer;
+        rightPointer = object.rightPointer;
+        data = object.data;
+
     }
 
     Node* getLeftPointer(){
@@ -32,6 +40,12 @@ class Node{
     char getData(){
         return data;
     }
+
+    Node* clone(){
+        Node* tempNode = new Node(leftPointer , data , rightPointer);
+
+        return tempNode;
+    }
 };
 
 class Tree{
@@ -43,14 +57,14 @@ class Tree{
     }
 
     void add(char newCharacter){
-        Node newNode(nullptr , newCharacter , nullptr);
+        Node* newNode = new Node(nullptr , newCharacter , nullptr);
         if (rootNode == nullptr){ // If the root node is null / if the tree is empty
-            rootNode = &newNode;
+            rootNode = newNode;
             return;
         }
 
         short int placeFound = false;
-        Node *currentNode = rootNode;
+        Node* currentNode = rootNode;
 
         while (placeFound == 0){
 
@@ -72,12 +86,10 @@ class Tree{
         }
 
         if (currentNode->getData() < newCharacter){
-            currentNode->setRightPointer(&newNode);
+            currentNode->setRightPointer(newNode);
         } else if (currentNode->getData() > newCharacter){
-            currentNode->setLeftPointer(&newNode);
+            currentNode->setLeftPointer(newNode);
         }
-
-        printf("root data: %c\n" , rootNode->getData());
 
     }
 
@@ -89,12 +101,12 @@ class Tree{
     void preOrder(Node* currentNode){
         printf("%c\n" , (*currentNode).getData());
 
-        // if (currentNode -> getLeftPointer() != nullptr){
-        //     preOrder(currentNode->getLeftPointer());
-        // }
-        // if (currentNode -> getRightPointer() != nullptr){
-        //     preOrder(currentNode -> getRightPointer());
-        // }
+        if (currentNode -> getLeftPointer() != nullptr){
+            preOrder(currentNode->getLeftPointer());
+        }
+        if (currentNode -> getRightPointer() != nullptr){
+            preOrder(currentNode -> getRightPointer());
+        }
     }
 };
 
@@ -121,15 +133,13 @@ void preOrder(Node *rootNode){
 
 int main(){
     
-    printf("Runnig");
-
     Tree testTree;
 
     preOrder(&node1);
     printf("-----\n");
     testTree.add('F');
-    testTree.add('D');
     testTree.add('B');
+    testTree.add('D');
 
     // printf("%c\n" , testTree.getRoot()->getData());
 
